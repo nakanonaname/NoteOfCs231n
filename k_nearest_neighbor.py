@@ -75,6 +75,7 @@ class KNearestNeighbor(object):
                 # training point, and store the result in dists[i, j]. You should   #
                 # not use a loop over dimension, nor use np.linalg.norm().          #
                 #####################################################################
+                dists[i][j] = np.sqrt(np.sum((X[i]-self.X_train[j]) ** 2))
                 pass
         return dists
 
@@ -95,6 +96,7 @@ class KNearestNeighbor(object):
             # points, and store the result in dists[i, :].                        #
             # Do not use np.linalg.norm().                                        #
             #######################################################################
+            dists[i, :] = np.sqrt(np.sum(np.square((self.X_train-X[i])), axis=1))
             pass
         return dists
 
@@ -150,6 +152,8 @@ class KNearestNeighbor(object):
             # neighbors. Store these labels in closest_y.                           #
             # Hint: Look up the function numpy.argsort.                             #
             #########################################################################
+            closest_y = self.y_train[np.argsort(dists[i])][0:k]
+            pass
 
 
             #########################################################################
@@ -159,6 +163,8 @@ class KNearestNeighbor(object):
             # Store this label in y_pred[i]. Break ties by choosing the smaller     #
             # label.                                                                #
             #########################################################################
+            y_pred[i] = max(closest_y, key=list(closest_y).count)
+            pass
 
 
         return y_pred
