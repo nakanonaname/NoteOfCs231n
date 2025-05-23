@@ -1,4 +1,5 @@
 # 第一份作业的问题和回答：
+## KNN
 **Inline Question 1**
 
 Notice the structured patterns in the distance matrix, where some rows or columns are visibly brighter. (Note that with the default color scheme black indicates low distances while white indicates high distances.)
@@ -47,4 +48,35 @@ $\color{blue}{\textit Your Answer:}$ 2&4
 
 
 $\color{blue}{\textit Your Explanation:}$ 2:1-NN的训练误差总是小于或等于5-NN的。4：使用k-NN分类器对测试样例进行分类所需的时间随着训练集的大小而增长。
+
+## FullyConnectedNets
+
+## Inline Question 1:
+Did you notice anything about the comparative difficulty of training the three-layer network vs. training the five-layer network? In particular, based on your experience, which network seemed more sensitive to the initialization scale? Why do you think that is the case?
+
+## Answer:
+五层网络：使用Xavier/Glorot初始化（按1/√n缩放）比固定缩放效果更好,批处理规范化有助于降低初始化的敏感性,更小的学习率更需要超参数调优。
+
+这与已知的深度学习理论一致，其中更深的架构需要更仔细的初始化，以保持网络中稳定的梯度流。
+
+
+## Inline Question 2:
+
+AdaGrad, like Adam, is a per-parameter optimization method that uses the following update rule:
+
+```
+cache += dw**2
+w += - learning_rate * dw / (np.sqrt(cache) + eps)
+```
+
+John notices that when he was training a network with AdaGrad that the updates became very small, and that his network was learning slowly. Using your knowledge of the AdaGrad update rule, why do you think the updates would become very small? Would Adam have the same issue?
+
+
+## Answer:
+AdaGrad更新变小的原因：
+AdaGrad持续累加梯度平方（cache += dw**2），导致分母√cache随时间单调增大，使得学习率不断衰减，最终更新量趋近于零。
+
+Adam是否会有同样问题？
+不会。Adam使用指数衰减的梯度平方滑动平均（而非累加），并引入偏差校正，使得分母√v_hat能稳定在合理范围，避免更新量无限缩小。
+
 
