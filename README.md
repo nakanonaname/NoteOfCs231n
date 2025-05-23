@@ -79,4 +79,64 @@ AdaGrad持续累加梯度平方（cache += dw**2），导致分母√cache随时
 Adam是否会有同样问题？
 不会。Adam使用指数衰减的梯度平方滑动平均（而非累加），并引入偏差校正，使得分母√v_hat能稳定在合理范围，避免更新量无限缩小。
 
+## 2 layered net
+## Inline Question 1:
+
+We've only asked you to implement ReLU, but there are a number of different activation functions that one could use in neural networks, each with its pros and cons. In particular, an issue commonly seen with activation functions is getting zero (or close to zero) gradient flow during backpropagation. Which of the following activation functions have this problem? If you consider these functions in the one dimensional case, what types of input would lead to this behaviour?
+1. Sigmoid
+2. ReLU
+3. Leaky ReLU
+
+$\color{blue}{\textit Your Answer:}$ *Fill this in*
+## Inline Question 1:
+
+We've only asked you to implement ReLU, but there are a number of different activation functions that one could use in neural networks, each with its pros and cons. In particular, an issue commonly seen with activation functions is getting zero (or close to zero) gradient flow during backpropagation. Which of the following activation functions have this problem? If you consider these functions in the one dimensional case, what types of input would lead to this behaviour?
+1. Sigmoid
+2. ReLU
+3. Leaky ReLU
+
+$\color{blue}{\textit Your Answer:}$ 会出现梯度消失问题的激活函数：
+
+Sigmoid：导数σ'(x)=σ(x)(1-σ(x))，在输入值较大时σ(x)接近0或1，导致导数接近0
+
+ReLU：导数在负区间恒为0，导致"神经元死亡"现象
+
+不会出现梯度消失问题的激活函数：
+
+Leaky ReLU：全区间都有非零梯度
+Leaky ReLU通过负区间的非零斜率设计，从根本上避免了梯度消失问题。
+
+## Inline Question 2:
+
+Now that you have trained a Neural Network classifier, you may find that your testing accuracy is much lower than the training accuracy. In what ways can we decrease this gap? Select all that apply.
+
+1. Train on a larger dataset.
+2. Add more hidden units.
+3. Increase the regularization strength.
+4. None of the above.
+
+$\color{blue}{\textit Your Answer:}$ 1&3
+
+$\color{blue}{\textit Your Explanation:}$ 1. 使用更大的训练集：更多数据能减少过拟合，使模型学到更通用的特征而非训练集噪声。3：增强正则化强度：更强的L2/L1正则化或Dropout能约束模型复杂度，抑制过拟合。
+2：增加隐藏单元：会增大模型容量，反而可能扩大训练-测试差距（除非同时调整正则化）。
+
+## softmax
+
+**Inline Question 1**
+
+Why do we expect our loss to be close to -log(0.1)? Explain briefly.**
+
+$\color{blue}{\textit Your Answer:}$ Softmax归一化后，每个类别的预测概率≈1/C（C为类别数）
+
+10分类时：-log(1/10) = log(10) ≈ 2.302
+
+实际训练时初始损失若接近该值，说明初始化正确
+
+若显著偏离（如远大于该值），可能提示初始化或实现有问题
+
+p_i = 1/C  
+L = -log(p_i) = -log(1/C) = log(C)
+
+
+
 
