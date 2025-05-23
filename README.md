@@ -120,7 +120,7 @@ $\color{blue}{\textit Your Answer:}$ 1&3
 $\color{blue}{\textit Your Explanation:}$ 1. 使用更大的训练集：更多数据能减少过拟合，使模型学到更通用的特征而非训练集噪声。3：增强正则化强度：更强的L2/L1正则化或Dropout能约束模型复杂度，抑制过拟合。
 2：增加隐藏单元：会增大模型容量，反而可能扩大训练-测试差距（除非同时调整正则化）。
 
-## softmax
+## Softmax
 
 **Inline Question 1**
 
@@ -137,6 +137,36 @@ $\color{blue}{\textit Your Answer:}$ Softmax归一化后，每个类别的预测
 p_i = 1/C  
 L = -log(p_i) = -log(1/C) = log(C)
 
+**Inline Question 2**
+
+Although gradcheck is reliable softmax loss, it is possible that for SVM loss, once in a while, a dimension in the gradcheck will not match exactly. What could such a discrepancy be caused by? Is it a reason for concern? What is a simple example in one dimension where a svm loss gradient check could fail? How would change the margin affect of the frequency of this happening?
+
+Note that SVM loss for a sample $(x_i, y_i)$ is defined as: $$L_i = \sum_{j\ne y_i}\max(0, s_j - s_{y_i} + \Delta)$$ where $j$ iterates over all classes except the correct class $y_i$ and $s_j$ denotes the classifier score for $j^{th}$ class. $\Delta$ is a scalar margin. For more information, refer to 'Multiclass Support Vector Machine loss' on [this](https://cs231n.github.io/linear-classify/) page.
+
+*Hint: the SVM loss function is not strictly speaking differentiable.*
+
+
+$\color{blue}{\textit Your Answer:}$ SVM损失在边界点不可微，导致数值/解析梯度在临界点附近可能不一致。无需担心，除非误差过大（通常仅影响个别样本）。当 s j=s y i −Δ 时，梯度检查可能失败。
+增大Δ 可减少边界样本数量，降低梯度检查失败频率。
+
+
+**Inline question 3**
+
+Describe what your visualized Softmax classifier weights look like, and offer a brief explanation for why they look the way they do.
+
+$\color{blue}{\textit Your Answer:}$  在CIFAR-10等图像分类任务中，Softmax分类器的权重矩阵可视化后呈现对比鲜明的颜色分布。
+源于Softmax的线性决策边界特性：梯度下降使权重聚焦于最具判别力的特征（如猫的耳朵、鸟的喙），忽略类内差异大的区域（如背景）。若某类包含多个子类（如"狗"类包含不同品种），权重会学习这些子类的平均特征，导致模糊化。
+
+相比SVM，Softmax权重平滑，类别间对比更柔和。
+
+**Inline Question 4** - *True or False*
+
+Suppose the overall training loss is defined as the sum of the per-datapoint loss over all training examples. It is possible to add a new datapoint to a training set that would change the softmax loss, but leave the SVM loss unchanged.
+
+$\color{blue}{\textit Your Answer:}$ TRUE
+
+
+$\color{blue}{\textit Your Explanation:}$ Softmax损失对所有类别得分敏感，新数据点可能改变其他类的概率分布，即使该样本的SVM损失为0（已正确分类），Softmax仍会因概率重新归一化而改变总损失。
 
 
 
